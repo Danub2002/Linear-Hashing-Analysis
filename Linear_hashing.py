@@ -84,6 +84,58 @@ class Linear_hashing:
       print(f'dps de realocar ocupados {self.occupied_spaces}, espacos {self.spaces} e alpha: {cur_alpha}')
     print()
 
+  def remove(self, key):
+    print(self.buckets)
+    print(f'nivel: {self.l}, N: {self.N}')    
+    print(f'Removendo a chave {key}')
+
+    i = key % (self.m * (2 ** self.l))
+    
+    if i < self.N:
+        i = key % (self.m * (2 ** (self.l + 1)))
+    
+    # Removendo k da lista Li
+    if key in self.buckets[i]:
+        self.buckets[i].remove(key)
+        self.occupied_spaces -= 1 # Atualizando a quantidade de espacos ocupados
+    
+    # Verificando se α < α_min
+    cur_alpha = self.occupied_spaces / self.spaces
+    print(self.buckets)
+    print("α = ", cur_alpha, " \n")
+    
+    while cur_alpha < self.alpha_min:
+        print(f'Eliminar pagina! Limite do fator de carga α_min violado (α = {cur_alpha}).\n')
+
+        #Decrementando N
+        self.N -= 1
+        
+        #Verificando se N < 0
+        if self.N < 0:
+            print('Como N < 0, entao todas as listas pertencem ao nivel l. Eh necessario retornar ao nivel anterior')
+            self.l -= 1
+            self.N = 2 ** self.l - 1
+        
+        #Realocando registros da lista L_(N+2^l*m) para L_N usando hl
+        src_idx = self.N + (2 ** self.l) * self.m
+        for k in self.buckets[src_idx]:
+            new_pos = k % (self.m * 2 ** (self.l)) # Sempre sera igual a N
+            self.check_insertion(k,new_pos,realocation=True) 
+            print(f'Realocando a chave {k} da lista L{src_idx} para L{new_pos}')
+            print(self.buckets)       
+
+        # Depois de realocarmos precisamos decrementar spaces de acordo a quantidade de pags removidas em 'self.buckets[src_idx]' 
+        self.spaces -= self.page_size * math.ceil(len(self.buckets[src_idx]) / self.page_size)
+      
+        # Removendo a lista L_(N+2^l*m)
+        print(f'Removendo a lista {src_idx}') 
+        self.buckets.pop(src_idx)
+        print(self.buckets)        
+
+        cur_alpha = self.occupied_spaces / self.spaces
+
+        print("α (apos eliminar pagina) = ", cur_alpha, " \n")
+        print(f'nivel: {self.l}, N: {self.N} \n')    
 
   def print(self):
     for i in range(len(self.buckets)):
@@ -94,8 +146,16 @@ class Linear_hashing:
       print("--------------------------")
 
 h = Linear_hashing(page_size=2,m=2,alpha_max=0.85,alpha_min=0.5)
-lista = [8, 11, 10, 15, 17, 25, 44, 12]
+lista = [8, 11, 10, 15, 22]
 for l in lista:
   h.insert(l)
+
+h.print()
+
+print("\n\n------------REMOCAO-------------- \n")
+
+to_be_removed = [10, 15, 8]
+for l in to_be_removed:
+  h.remove(l)
 
 h.print()
