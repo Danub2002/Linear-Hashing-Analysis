@@ -146,17 +146,17 @@ class Linear_hashing:
 
   def search(self, key):
     i = key % (self.m * (2 ** self.l))
+    number_of_acesses = 1
 
     if i < self.N:
         i = key % (self.m * (2 ** (self.l + 1)))
 
     for k in self.buckets[i]:
-      if k == key:
-        print(f"Elemento {key} encontrado")
-        return True
+        number_of_acesses += 1
+      if k == key:        
+        return number_of_acesses
 
-    print(f"Elemento {key} não encontrado")
-    return False
+    return number_of_acesses
 
   def get_alpha_medio(self):
     cur_alpha = self.occupied_spaces / self.spaces
