@@ -150,13 +150,13 @@ class Linear_hashing:
 
     if i < self.N:
         i = key % (self.m * (2 ** (self.l + 1)))
-
+    
     for k in self.buckets[i]:
         number_of_acesses += 1
-      if k == key:        
-        return number_of_acesses
+        if k == key:        
+            return math.ceil(number_of_acesses / self.page_size)
 
-    return number_of_acesses
+    return math.ceil(number_of_acesses / self.page_size)
 
   def get_alpha_medio(self):
     cur_alpha = self.occupied_spaces / self.spaces
@@ -170,6 +170,20 @@ class Linear_hashing:
     return_val = val / len(self.buckets)
 
     return return_val
+  
+  def get_number_of_buckets(self):
+    return len(self.buckets)
+
+  def get_L_max(self):
+    maior_bucket = 0
+    for bucket in self.buckets:
+      if len(bucket) > maior_bucket:
+        maior_bucket = len(bucket)
+    maior_num_paginas = math.ceil(maior_bucket/self.page_size)
+    if maior_bucket == 0:
+      return 1
+    return maior_num_paginas
+    
 
   def print(self):
     for i in range(len(self.buckets)):
