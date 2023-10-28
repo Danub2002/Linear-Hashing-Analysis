@@ -152,15 +152,9 @@ class Linear_hashing:
         i = key % (self.m * (2 ** (self.l + 1)))
     
     for k in self.buckets[i]:
-<<<<<<< HEAD
-        number_of_acesses += 1
-        if k == key:        
-            return math.ceil(number_of_acesses / self.page_size)
-=======
       number_of_acesses += 1
       if k == key:        
         return number_of_acesses
->>>>>>> 85fde7c32e89b54e24a4b59a40ef53cb6ea11e57
 
     return math.ceil(number_of_acesses / self.page_size)
 
