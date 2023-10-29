@@ -47,7 +47,7 @@ class Linear_hashing:
 
     #print(cur_alpha)
     while cur_alpha > self.alpha_max:
-      #print(f'quebra => ocupados {self.occupied_spaces}, espacos {self.spaces},quebra pq alpha: {cur_alpha}')
+      #print(f'quebra pq alpha: {cur_alpha}')
       # Calculate the desired size of self.buckets
       desired_size = self.N + self.m * (2 ** self.l)
 
@@ -152,15 +152,9 @@ class Linear_hashing:
         i = key % (self.m * (2 ** (self.l + 1)))
     
     for k in self.buckets[i]:
-<<<<<<< HEAD
         number_of_acesses += 1
         if k == key:        
             return math.ceil(number_of_acesses / self.page_size)
-=======
-      number_of_acesses += 1
-      if k == key:        
-        return number_of_acesses
->>>>>>> 85fde7c32e89b54e24a4b59a40ef53cb6ea11e57
 
     return math.ceil(number_of_acesses / self.page_size)
 
@@ -180,12 +174,14 @@ class Linear_hashing:
   def get_number_of_buckets(self):
     return len(self.buckets)
 
-  def get_L_max(self):
+
+  def get_L_max2(self):
     maior_bucket = 0
     for bucket in self.buckets:
       if len(bucket) > maior_bucket:
         maior_bucket = len(bucket)
     maior_num_paginas = math.ceil(maior_bucket/self.page_size)
+    #maior_num_paginas = round(maior_bucket/self.page_size, 2)
     if maior_bucket == 0:
       return 1
     return maior_num_paginas
